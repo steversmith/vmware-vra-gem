@@ -17,5 +17,5 @@
 #
 
 module Vra
-  VERSION = '1.7.0'.freeze
+  VERSION = '1.7.1-expeditors'.freeze
 end

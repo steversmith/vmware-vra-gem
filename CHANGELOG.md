@@ -1,5 +1,19 @@
 # vmware-vra-gem CHANGELOG
 
+## v1.7.1-expeditors (2016-09-19)
+
+Modified lib/vra/catalog_request.rb to comment out provider-__Notes setting on the request payload. 
+
+See https://github.com/chef-partners/vmware-vra-gem/issues/33
+
+Needed to avoid the following RuntimeError: 
+
+* The vRA request failed: The following component requests failed:
+* vSphere_Machine_1. Allocation request ...
+* failed with [Custom property '__Notes' cannot be from predefined custom properties]
+
+Added *.gem to .gitignore
+
 ## v1.7.0 (2016-08-02)
 * [pr#31](https://github.com/chef-partners/vmware-vra-gem/pull/31) instructing Net::HTTP not to verify SSL when verify_ssl is false
 
