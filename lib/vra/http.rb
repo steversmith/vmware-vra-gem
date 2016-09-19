@@ -1,4 +1,5 @@
 require 'net/http'
+require 'openssl'
 
 module Vra
   module Http
@@ -36,8 +37,10 @@ module Vra
       def call
         uri = URI(params[:url]) || fail(':url required')
 
+        verify_mode = params[:verify_ssl] ? ::OpenSSL::SSL::VERIFY_PEER : OpenSSL::SSL::VERIFY_NONE
+
         Net::HTTP.start(uri.host, uri.port,
-                        use_ssl: uri.scheme == 'https') do |http|
+                        use_ssl: uri.scheme == 'https', verify_mode: verify_mode) do |http|
           request = http_request(params[:method], uri)
           request.initialize_http_header(params[:headers] || {})
           request.body = params[:payload] || ''

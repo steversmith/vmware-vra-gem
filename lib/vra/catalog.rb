@@ -15,6 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+require 'json'
 
 module Vra
   class Catalog
@@ -25,13 +26,23 @@ module Vra
     end
 
     def all_items
-      client.http_get_paginated_array!('/catalog-service/api/consumer/catalogItems')
-            .map! { |x| Vra::CatalogItem.new(client, data: x) }
+#      client.http_get_paginated_array!('/catalog-service/api/consumer/catalogItems')
+#            .map! { |x| Vra::CatalogItem.new(client, data: x) }
+      dbg = client.http_get_paginated_array!('/catalog-service/api/consumer/catalogItems')
+#      puts "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+#      puts "STEVER dbg => #{JSON.pretty_generate(dbg)}"
+#      puts "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+      dbg.map! { |x| Vra::CatalogItem.new(client, data: x) }
     end
 
     def entitled_items
-      client.http_get_paginated_array!('/catalog-service/api/consumer/entitledCatalogItems')
-            .map! { |x| Vra::CatalogItem.new(client, data: x['catalogItem']) }
+#      client.http_get_paginated_array!('/catalog-service/api/consumer/entitledCatalogItems')
+#            .map! { |x| Vra::CatalogItem.new(client, data: x['catalogItem']) }
+      dbg = client.http_get_paginated_array!('/catalog-service/api/consumer/entitledCatalogItems')
+#      puts "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+#      puts "STEVER dbg => #{JSON.pretty_generate(dbg)}"
+#      puts "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+      dbg.map! { |x| Vra::CatalogItemEntitled.new(client, data: x) }
     end
 
     def request(*args)

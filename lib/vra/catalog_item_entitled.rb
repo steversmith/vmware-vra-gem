@@ -19,32 +19,13 @@
 require 'ffi_yajl'
 
 module Vra
-  class CatalogItem
+  class CatalogItemEntitled
     attr_reader :id, :client
     def initialize(client, opts)
-      @client            = client
-      @id                = opts[:id]
-      @catalog_item_data = opts[:data]
-
-      if @id.nil? && @catalog_item_data.nil?
-        raise ArgumentError, 'must supply an id or a catalog item data hash'
-      end
-
-      if !@id.nil? && !@catalog_item_data.nil?
-        raise ArgumentError, 'must supply an id OR a catalog item data hash, not both'
-      end
-
-      if @catalog_item_data.nil?
-        fetch_catalog_item
-      else
-        @id = @catalog_item_data['id']
-      end
-    end
-
-    def fetch_catalog_item
-      @catalog_item_data = client.get_parsed("/catalog-service/api/consumer/catalogItems/#{id}")
-    rescue Vra::Exception::HTTPNotFound
-      raise Vra::Exception::NotFound, "catalog ID #{id} does not exist"
+      @client = client
+      @data   = opts[:data]
+      @catalog_item_data = @data['catalogItem']
+      @id                = @catalog_item_data['id']
     end
 
     def name
@@ -60,7 +41,7 @@ module Vra
     end
 
     def entitled_organizations
-      {}
+      @data['entitledOrganizations']
     end
 
     def organization
